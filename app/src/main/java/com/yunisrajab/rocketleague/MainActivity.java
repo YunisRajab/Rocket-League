@@ -17,7 +17,9 @@ import org.jsoup.select.*;
 
 import java.io.File;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(Color.parseColor("#000000"));
 
         mRecyclerView = findViewById(R.id.recyclerview);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
 
         tourneys = new ArrayList<>();
         tiles = new ArrayList<>();
@@ -74,6 +74,24 @@ public class MainActivity extends AppCompatActivity {
         new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Portal:Tournaments");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!ifTile)   {
+            GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            TourneyAdapter tourneyAdapter = new TourneyAdapter(MainActivity.this, tourneys);
+            mRecyclerView.setAdapter(tourneyAdapter);
+            ifTile = false;
+        }   else {
+            GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 1);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            TileAdapter tileAdapter = new TileAdapter(MainActivity.this, tiles);
+            mRecyclerView.setAdapter(tileAdapter);
+            ifTile = true;
+        }
+    }
+
     private void populateLists(Elements rows)    {
 
 
@@ -98,8 +116,11 @@ public class MainActivity extends AppCompatActivity {
 
             tourneys.add(new Tourney(type,title,date,prize,nop,location,tourney,country,
                     iconLink,titleLink,countryLink));
+            Log.e(TAG+"t",  date);
         }
 
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         TourneyAdapter tourneyAdapter = new TourneyAdapter(MainActivity.this, tourneys);
         mRecyclerView.setAdapter(tourneyAdapter);
     }
@@ -117,8 +138,16 @@ public class MainActivity extends AppCompatActivity {
             date    =   element.getElementsByClass("date").first().text();
 
             tiles.add(new Tile(link,thumbSrc,title,subtitle,date));
+
+            try {
+//                date = date.lastIndexOf(" ")+"/"+date.substring(0,date.indexOf(" "))+"/"
+//                        +date.substring(date.indexOf(" ")+1, date.indexOf(","));
+                Date date1=new SimpleDateFormat("MMM dd, yyyy").parse(date);
+                Log.e(TAG,  ""+date1);
+            } catch(Exception e)    {
+                Log.e(TAG, "Exception "+e);
+            }
         }
-        Log.e(TAG,  ""+tiles.size());
 
 //        TileAdapter tileAdapter = new TileAdapter(MainActivity.this, tiles);
 //        mRecyclerView.setAdapter(tileAdapter);

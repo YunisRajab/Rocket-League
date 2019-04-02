@@ -39,7 +39,6 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
         tileViewHolder.mImage.setImageBitmap(mTileList.get(i).getImg());
         tileViewHolder.mTitle.setText(mTileList.get(i).getTitle());
         tileViewHolder.mDate.setText(mTileList.get(i).getDate());
-        Log.e("RL",mTileList.get(i).getTitle());
 
         tileViewHolder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
