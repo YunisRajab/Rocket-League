@@ -1,19 +1,20 @@
-package com.yunisrajab.rocketleague;
+package com.yunisrajab.rocketleague.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.yunisrajab.rocketleague.R;
+import com.yunisrajab.rocketleague.Objects.Tile;
+import com.yunisrajab.rocketleague.Activities.WebActivity;
+
 import java.util.List;
 
 public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder> {
@@ -21,7 +22,7 @@ public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder
     Context mContext;
     List<Tile>   mTileList;
 
-    TileAdapter(Context context,    List<Tile>   tiles)   {
+    public TileAdapter(Context context, List<Tile> tiles)   {
         this.mContext   =   context;
         this.mTileList   =   tiles;
     }

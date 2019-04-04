@@ -1,4 +1,4 @@
-package com.yunisrajab.rocketleague;
+package com.yunisrajab.rocketleague.Activities;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -7,9 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.yunisrajab.rocketleague.R;
 
 public class WebActivity extends AppCompatActivity {
 

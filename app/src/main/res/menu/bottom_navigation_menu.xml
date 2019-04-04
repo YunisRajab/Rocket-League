@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--icons8.com-->
+    <item
+        android:id="@+id/bn_tourneys"
+        android:enabled="true"
+        android:icon="@drawable/ic_tourneys"
+        android:title="Tournaments"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bn_news"
+        android:enabled="true"
+        android:icon="@drawable/ic_news"
+        android:title="News"
+        app:showAsAction="ifRoom" />
+    <item
+        android:title="Misc"
+        android:id="@+id/bn_misc"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_categorize"/>
+
+    <item
+        android:title="Settings"
+        android:id="@+id/bn_settings"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_settings"/>
+</menu>

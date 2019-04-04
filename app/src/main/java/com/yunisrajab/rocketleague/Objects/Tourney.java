@@ -1,4 +1,4 @@
-package com.yunisrajab.rocketleague;
+package com.yunisrajab.rocketleague.Objects;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +12,8 @@ public class Tourney {
     private String  type, title, date, prize, nop, location, tourney, titleLink, country;
     private Bitmap iconLink, countryLink;
 
-    Tourney(String type, String title, String date, String prize, String nop, String location,
-            String tourney, String country, String iconLink, String titleLink, String countryLink) {
+    public Tourney(String type, String title, String date, String prize, String nop, String location,
+                   String tourney, String country, String iconLink, String titleLink, String countryLink) {
         this.type   =   type;
         this.title   =   title;
         this.date   =   date;
