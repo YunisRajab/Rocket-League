@@ -3,6 +3,8 @@ package com.yunisrajab.rocketleague.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.bottomnavigation.LabelVisibilityMode;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.felipecsl.gifimageview.library.GifImageView;
 import com.yunisrajab.rocketleague.Adapters.TileAdapter;
 import com.yunisrajab.rocketleague.Adapters.TourneyAdapter;
 import com.yunisrajab.rocketleague.Fragments.NewsFragment;
@@ -29,10 +32,12 @@ import com.yunisrajab.rocketleague.Objects.Tile;
 import com.yunisrajab.rocketleague.Objects.Tourney;
 import com.yunisrajab.rocketleague.R;
 
+import org.apache.commons.io.IOUtils;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     boolean ifTile  =   false;
     NewsFragment mNewsFragment;
     TourneyFragment mTourneyFragment;
+    GifImageView gifView;
+    int pageno = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         mTourneyFragment = new TourneyFragment();
         mNewsFragment = new NewsFragment();
 
-        new RetrieveDoc().execute("https://www.rocketleague.com/ajax/articles-infinite/?p=");
+        new RetrieveDoc().execute("https://www.rocketleague.com/ajax/articles-infinite/?p="+pageno);
         new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Portal:Tournaments");
 
         mBottomNavigationView    =   findViewById(R.id.bottomNavigation);
@@ -75,6 +82,18 @@ public class MainActivity extends AppCompatActivity {
         MenuItem    menuItem    =   menu.getItem(0);
         menuItem.setChecked(true);
         mBottomNavigationView.setOnNavigationItemSelectedListener(bottomListener);
+
+        gifView = findViewById(R.id.gifView);
+
+        try {
+            InputStream inputStream = getAssets().open("splash.gif");
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            gifView.setBytes(bytes);
+            gifView.startAnimation();
+            mBottomNavigationView.setVisibility(View.INVISIBLE);
+        } catch (Exception e) {
+            Log.e("RL", e.toString());
+        }
     }
 
     private void populateLists(Elements rows)    {
@@ -127,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
         bundle.putSerializable("arraylist",  (Serializable)  mTourneyList);
         mTourneyFragment.setArguments(bundle);
         setFragment(mTourneyFragment);
+
+//        turn off splash screen
+//        should wait for a broadcast from tourneys
+        gifView.stopAnimation();
+        gifView.setVisibility(View.GONE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
+        Log.e(TAG, "done splashscreen");
     }
 
     private void populateNews(Elements elements)   {
@@ -232,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment)  {
         FragmentTransaction fragmentTransaction =   getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mainFrame,  fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss(); //read into this
 //        https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa
     }
 

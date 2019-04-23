@@ -43,4 +43,10 @@
         app:itemTextColor="@drawable/bottom_item_color"
         app:menu="@menu/bottom_navigation_menu" />
 
+    <com.felipecsl.gifimageview.library.GifImageView
+        android:id="@+id/gifView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_dark" />
+
 </RelativeLayout>
