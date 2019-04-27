@@ -2,25 +2,26 @@ package com.yunisrajab.rocketleague.Objects;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.URL;
 
 public class Tourney {
 
-    private String  type, title, date, prize, nop, location, tourney, titleLink, country;
+    private String  type, title, date, location, tourney, titleLink;
     private Bitmap iconLink, countryLink;
 
-    public Tourney(String type, String title, String date, String prize, String nop, String location,
-                   String tourney, String country, String iconLink, String titleLink, String countryLink) {
+    public Tourney(String type, String title, String date, String location, String tourney,
+                   String iconLink, String titleLink, String countryLink) {
         this.type   =   type;
         this.title   =   title;
         this.date   =   date;
-        this.prize   =   prize;
-        this.nop   =   nop;
         this.location   =   location;
 
+        Bitmap dummy = null;
 //        try {
 //            URL url1 = new URL(iconLink);
 //            URL url2 = new URL(countryLink);
@@ -30,11 +31,11 @@ public class Tourney {
 //            System.out.println(e);
 //        }
 
-        new getBitmap().execute(iconLink);
+        new getBitmap().execute(new ImageObject(iconLink, "icon", dummy));
+        new getBitmap().execute(new ImageObject(countryLink, "country", dummy));
 
         this.tourney   =   tourney;
         this.titleLink   =   titleLink;
-        this.country   =   country;
     }
 
     public String getDate() {
@@ -43,14 +44,6 @@ public class Tourney {
 
     public String getLocation() {
         return location;
-    }
-
-    public String getNop() {
-        return nop;
-    }
-
-    public String getPrize() {
-        return prize;
     }
 
     public String getTitle() {
@@ -73,34 +66,37 @@ public class Tourney {
         return iconLink;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
     public String getTourney() {
         return tourney;
     }
 
+    class ImageObject {
+        String link, type;
+        Bitmap bitmap;
+        ImageObject(String link, String type, Bitmap bitmap) {
+            this.link = link;
+            this.type = type;
+            this.bitmap = bitmap;
+        }
+    }
 
-    class   getBitmap   extends AsyncTask<String,Void,Bitmap>   {
+    class   getBitmap   extends AsyncTask<ImageObject,Void,ImageObject>   {
         @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap  bitmap = null;
+        protected ImageObject doInBackground(ImageObject... imageObject) {
             try {
-                URL url = new URL(strings[0]);
-                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                URL url = new URL(imageObject[0].link);
+                imageObject[0].bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } catch(IOException e) {
                 System.out.println(e);
             }
-            return bitmap;
+            return imageObject[0];
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            iconLink = bitmap;
-            countryLink = bitmap;
-//            TODO add countrylink bitmap
+        protected void onPostExecute(ImageObject imageObject) {
+            super.onPostExecute(imageObject);
+            if (imageObject.type.contains("icon")) iconLink = imageObject.bitmap;
+            else countryLink = imageObject.bitmap;
         }
     }
 }

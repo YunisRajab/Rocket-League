@@ -1,5 +1,6 @@
 package com.yunisrajab.rocketleague.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,19 +16,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yunisrajab.rocketleague.Activities.MainActivity;
 import com.yunisrajab.rocketleague.Adapters.TabAdapter;
+import com.yunisrajab.rocketleague.Adapters.TileAdapter;
 import com.yunisrajab.rocketleague.Adapters.TourneyAdapter;
 import com.yunisrajab.rocketleague.Objects.Tourney;
 import com.yunisrajab.rocketleague.R;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class TourneyFragment extends Fragment {
 
     String TAG = "RL";
-    TourneyAdapter mAdapter;
-    ArrayList<Tourney> mainList;
-    ArrayList<Tourney>    curatedList;
+    ArrayList<Tourney> mTourneyArrayList;
     View    rootView;
     ViewPager   mViewPager;
     TabAdapter mTabAdapter;
@@ -38,25 +45,17 @@ public class TourneyFragment extends Fragment {
 
     @Override
     public void setArguments(@Nullable Bundle args) {
-        String  type    =   (String)    args.getString("type");
-        if (type.equals("all")) {
-            mainList  =   (ArrayList<Tourney>)  args.getSerializable("arraylist");
-        }
-        if (type.contains("all")) {
-            curatedList = (ArrayList<Tourney>) args.getSerializable("arraylist");
-        }
-
+        mTourneyArrayList  =   (ArrayList<Tourney>)  args.getSerializable("arraylist");
     }
 
     public ArrayList<Tourney> getArrayList() {
-        return mainList;
+        return mTourneyArrayList;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.i("Curator","Main layout");
         rootView    =   inflater.inflate(R.layout.fragment_tourneys,    container,  false);
 
         TabLayout tabLayout   =   rootView.findViewById(R.id.tabLayout);
@@ -68,7 +67,7 @@ public class TourneyFragment extends Fragment {
                 getActivity().getColor(R.color.colorWhite));
 
         mViewPager  =   rootView.findViewById(R.id.viewPager);
-        mTabAdapter =   new TabAdapter(getActivity(),   mainList,   curatedList);
+        mTabAdapter =   new TabAdapter(getActivity(), mTourneyArrayList);
         mViewPager.setAdapter(mTabAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

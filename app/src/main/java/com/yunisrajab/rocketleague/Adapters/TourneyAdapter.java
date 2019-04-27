@@ -21,12 +21,10 @@ public class TourneyAdapter extends RecyclerView.Adapter<TourneyAdapter.TourneyV
 
     Context mContext;
     List<Tourney>   mTourneyList;
-    String type;
 
-    public TourneyAdapter(Context context, List<Tourney> tourneys, String type)   {
+    public TourneyAdapter(Context context, List<Tourney> tourneys)   {
         this.mContext   =   context;
         this.mTourneyList   =   tourneys;
-        this.type   =   type;
     }
 
     @NonNull

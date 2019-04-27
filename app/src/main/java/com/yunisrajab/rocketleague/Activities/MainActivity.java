@@ -112,13 +112,13 @@ public class MainActivity extends AppCompatActivity {
             title = row.child(0).child(2).child(0).text();
             titleLink = domain+row.child(0).child(2).child(0).attr("href");
             date = row.child(1).text();
-            prize = row.child(2).text();
-            nop = row.child(3).child(0).text();
+//            prize = row.child(2).text();
+//            nop = row.child(3).child(0).text();
             location = row.child(4).child(1).text();
             countryLink = domain+row.child(4).child(0).child(0).child(0).attr("src");
-            country = domain+row.child(4).child(0).child(0).attr("href");
+//            country = domain+row.child(4).child(0).child(0).attr("href");
 
-            mTourneyList.add(new Tourney(type,title,date,prize,nop,location,tourney,country,
+            mTourneyList.add(new Tourney(type,title,date,location,tourney,
                     iconLink,titleLink,countryLink));
 
 //            index error bs play around with the format
@@ -141,18 +141,21 @@ public class MainActivity extends AppCompatActivity {
 //        mRecyclerView.setAdapter(tourneyAdapter);
 
 
-        Bundle  bundle   =   new Bundle();
-        bundle.putString("type","all");
-        bundle.putSerializable("arraylist",  (Serializable)  mTourneyList);
-        mTourneyFragment.setArguments(bundle);
-        setFragment(mTourneyFragment);
+//        TODO wait for a broadcast from Tourney object saying all images are loaded
+//          after counter == arraylist.size*2
+        if (true) {
+            Bundle  bundle   =   new Bundle();
+            bundle.putSerializable("arraylist",  (Serializable)  mTourneyList);
+            mTourneyFragment.setArguments(bundle);
+            setFragment(mTourneyFragment);
 
 //        turn off splash screen
 //        should wait for a broadcast from tourneys
-        gifView.stopAnimation();
-        gifView.setVisibility(View.GONE);
-        mBottomNavigationView.setVisibility(View.VISIBLE);
-        Log.e(TAG, "done splashscreen");
+            gifView.stopAnimation();
+            gifView.setVisibility(View.GONE);
+            mBottomNavigationView.setVisibility(View.VISIBLE);
+            Log.e(TAG, "done splashscreen");
+        }
     }
 
     private void populateNews(Elements elements)   {
@@ -170,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
             mTileList.add(new Tile(link,thumbSrc,title,subtitle,date));
         }
 
-//        TileAdapter tileAdapter = new TileAdapter(MainActivity.this, tiles);
-//        mRecyclerView.setAdapter(tileAdapter);
+        Bundle  bundle   =   new Bundle();
+        bundle.putSerializable("arraylist",  (Serializable)  mTileList);
+        mNewsFragment.setArguments(bundle);
     }
 
     private static LocalDate[] fixFormat(String dateStr)    {
@@ -232,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener   bottomListener   =   new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Intent intent;
             switch (item.getItemId())   {
                 case R.id.bn_tourneys:
                     setFragment(mTourneyFragment);
