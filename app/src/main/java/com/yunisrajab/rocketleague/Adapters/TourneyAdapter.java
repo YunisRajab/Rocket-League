@@ -37,8 +37,8 @@ public class TourneyAdapter extends RecyclerView.Adapter<TourneyAdapter.TourneyV
 
     @Override
     public void onBindViewHolder(@NonNull final TourneyViewHolder tourneyViewHolder, int i) {
-        tourneyViewHolder.mImage.setImageBitmap(mTourneyList.get(i).getIconLink());
-        tourneyViewHolder.mCountry.setImageBitmap(mTourneyList.get(i).getCountryLink());
+        tourneyViewHolder.mImage.setImageBitmap(mTourneyList.get(i).getIcon());
+        tourneyViewHolder.mCountry.setImageBitmap(mTourneyList.get(i).getCountry());
         tourneyViewHolder.mTitle.setText(mTourneyList.get(i).getTitle());
         tourneyViewHolder.mDate.setText(mTourneyList.get(i).getDate());
 

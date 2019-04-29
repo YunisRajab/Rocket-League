@@ -17,12 +17,12 @@ import com.yunisrajab.rocketleague.Activities.WebActivity;
 
 import java.util.List;
 
-public class TileAdapter extends RecyclerView.Adapter<TileAdapter.TileViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.TileViewHolder> {
 
     Context mContext;
     List<Tile>   mTileList;
 
-    public TileAdapter(Context context, List<Tile> tiles)   {
+    public NewsAdapter(Context context, List<Tile> tiles)   {
         this.mContext   =   context;
         this.mTileList   =   tiles;
     }

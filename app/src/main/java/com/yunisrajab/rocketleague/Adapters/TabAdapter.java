@@ -60,13 +60,7 @@ public class TabAdapter extends PagerAdapter {
         weeklyList = new ArrayList<>();
         showList = new ArrayList<>();
         qualifierList = new ArrayList<>();
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Premier_Tournaments");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Major_Tournaments");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Minor_Tournaments");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Monthly_Tournaments");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Weekly_Tournaments");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Show_Matches");
-//        new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Qualifier_Tournaments");
+        separateLists();
     }
 
     @NonNull
@@ -76,7 +70,6 @@ public class TabAdapter extends PagerAdapter {
         View    view    =   mLayoutInflater.inflate(R.layout.tab,   container,  false);
 
         Log.e(TAG,  "position "+position);
-        separateLists();
 
         premierRecyclerView = view.findViewById(R.id.premierList);
         majorRecyclerView = view.findViewById(R.id.majorList);
@@ -95,6 +88,7 @@ public class TabAdapter extends PagerAdapter {
                 setupRecycler(weeklyRecyclerView, weeklyList);
                 setupRecycler(showRecyclerView, showList);
                 setupRecycler(qualifierRecyclerView, qualifierList);
+//                premierRecyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case    1:
 //                mAdapter = new TourneyAdapter(mContext,    mTourneyArrayList);

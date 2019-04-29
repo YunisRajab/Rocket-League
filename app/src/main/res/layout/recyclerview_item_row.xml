@@ -21,7 +21,8 @@
             <ImageView
                 android:id="@+id/ivImage"
                 android:layout_width="match_parent"
-                android:layout_height="48dp" />
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/activity_half_margin"/>
 
             <TextView
                 android:id="@+id/tvTitle"

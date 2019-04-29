@@ -1,6 +1,10 @@
 package com.yunisrajab.rocketleague.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
@@ -15,17 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 
 import com.felipecsl.gifimageview.library.GifImageView;
-import com.yunisrajab.rocketleague.Adapters.TileAdapter;
-import com.yunisrajab.rocketleague.Adapters.TourneyAdapter;
 import com.yunisrajab.rocketleague.Fragments.NewsFragment;
 import com.yunisrajab.rocketleague.Fragments.TourneyFragment;
 import com.yunisrajab.rocketleague.Objects.Tile;
@@ -37,8 +36,10 @@ import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     TourneyFragment mTourneyFragment;
     GifImageView gifView;
     int pageno = 1;
+    int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,18 +145,10 @@ public class MainActivity extends AppCompatActivity {
 
 //        TODO wait for a broadcast from Tourney object saying all images are loaded
 //          after counter == arraylist.size*2
-        if (true) {
-            Bundle  bundle   =   new Bundle();
-            bundle.putSerializable("arraylist",  (Serializable)  mTourneyList);
-            mTourneyFragment.setArguments(bundle);
-            setFragment(mTourneyFragment);
-
-//        turn off splash screen
-//        should wait for a broadcast from tourneys
-            gifView.stopAnimation();
-            gifView.setVisibility(View.GONE);
-            mBottomNavigationView.setVisibility(View.VISIBLE);
-            Log.e(TAG, "done splashscreen");
+        Bitmap dummy = null;
+        for (int i = 0; i< mTourneyList.size(); i++) {
+            new getBitmap().execute(new ImageObject(mTourneyList.get(i).getIconLink(), "icon", i, dummy));
+            new getBitmap().execute(new ImageObject(mTourneyList.get(i).getCountryLink(), "country",  i, dummy));
         }
     }
 
@@ -273,6 +267,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
+    void stopSplash(ImageObject imageObject) {
+        counter++;
+        if (counter == mTourneyList.size()*2) {
+            Bundle  bundle   =   new Bundle();
+            bundle.putSerializable("arraylist",  (Serializable)  mTourneyList);
+            mTourneyFragment.setArguments(bundle);
+            setFragment(mTourneyFragment);
+
+            gifView.stopAnimation();
+            gifView.setVisibility(View.GONE);
+            mBottomNavigationView.setVisibility(View.VISIBLE);
+            Log.e(TAG, "Splash screen stopped "+counter);
+        }
+    }
+
     class RetrieveDoc   extends AsyncTask<String, Void, Document> {
 
         @Override
@@ -302,5 +311,38 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    class ImageObject {
+        String link, type;
+        int index;
+        Bitmap bitmap;
+        ImageObject(String link, String type, int index, Bitmap bitmap) {
+            this.link = link;
+            this.type = type;
+            this.index = index;
+            this.bitmap = bitmap;
+        }
+    }
+
+    class getBitmap extends AsyncTask<ImageObject,Void,ImageObject>   {
+        @Override
+        protected ImageObject doInBackground(ImageObject... imageObject) {
+            try {
+                URL url = new URL(imageObject[0].link);
+                imageObject[0].bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch(IOException e) {
+                System.out.println(e);
+            }
+            return imageObject[0];
+        }
+
+        @Override
+        protected void onPostExecute(ImageObject imageObject) {
+            super.onPostExecute(imageObject);
+            if (imageObject.type.contains("icon")) mTourneyList.get(imageObject.index).setIcon(imageObject.bitmap);
+            else mTourneyList.get(imageObject.index).setCountry(imageObject.bitmap);
+            stopSplash(imageObject);
+        }
     }
 }

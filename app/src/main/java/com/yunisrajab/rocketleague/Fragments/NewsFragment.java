@@ -3,23 +3,15 @@ package com.yunisrajab.rocketleague.Fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.yunisrajab.rocketleague.Adapters.TabAdapter;
-import com.yunisrajab.rocketleague.Adapters.TileAdapter;
-import com.yunisrajab.rocketleague.Adapters.TourneyAdapter;
+import com.yunisrajab.rocketleague.Adapters.NewsAdapter;
 import com.yunisrajab.rocketleague.Objects.Tile;
-import com.yunisrajab.rocketleague.Objects.Tourney;
 import com.yunisrajab.rocketleague.R;
 
 import java.util.ArrayList;
@@ -27,7 +19,7 @@ import java.util.ArrayList;
 public class NewsFragment extends Fragment {
 
     String TAG = "RL";
-    TileAdapter mAdapter;
+    NewsAdapter mAdapter;
     ArrayList<Tile> mTileArrayList;
     View rootView;
     RecyclerView mRecyclerView;
@@ -53,7 +45,7 @@ public class NewsFragment extends Fragment {
         mRecyclerView = rootView.findViewById(R.id.newsList);
 
         if (mTileArrayList  ==  null)   mTileArrayList  =   new ArrayList<>();
-        mAdapter = new TileAdapter(getActivity(), mTileArrayList);
+        mAdapter = new NewsAdapter(getActivity(), mTileArrayList);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
