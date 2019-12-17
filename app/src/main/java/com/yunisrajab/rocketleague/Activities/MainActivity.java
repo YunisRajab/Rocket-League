@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     NewsFragment mNewsFragment;
     TourneyFragment mTourneyFragment;
     GifImageView gifView;
-    int pageno = 1;
+    int pageno = 0;
     int counter = 0;
 
     @Override
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mTourneyFragment = new TourneyFragment();
         mNewsFragment = new NewsFragment();
 
-        new RetrieveDoc().execute("https://www.rocketleague.com/ajax/articles-infinite/?p="+pageno);
+        new RetrieveDoc().execute("https://www.rocketleague.com/ajax/articles-results/?p="+pageno);
         new RetrieveDoc().execute("https://liquipedia.net/rocketleague/Portal:Tournaments");
 
         mBottomNavigationView    =   findViewById(R.id.bottomNavigation);
